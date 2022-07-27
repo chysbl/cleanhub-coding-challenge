@@ -1,4 +1,5 @@
 import { Hub } from "../../types";
+import styles from "./HubList.module.scss";
 
 interface HubListProps {
   hubs: Hub[];
@@ -14,5 +15,5 @@ export default function HubList({ hubs }: HubListProps) {
 }
 
 function HubListItem({ hub }: { hub: Hub }) {
-  return <li>{hub.uuid}</li>;
+  return <li className={styles.card}>{hub.uuid}</li>;
 }
