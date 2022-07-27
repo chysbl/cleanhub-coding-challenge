@@ -2,6 +2,7 @@ import { ReactComponent as Bottle } from "../../assets/icons/bottles.svg";
 import { ReactComponent as Arrow } from "../../assets/icons/arrow.svg";
 import { Hub } from "../../types";
 import styles from "./HubList.module.scss";
+import Pill from "../Pill/Pill";
 
 interface HubListProps {
   hubs: Hub[];
@@ -19,13 +20,16 @@ export default function HubList({ hubs }: HubListProps) {
 function HubListItem({ hub }: { hub: Hub }) {
   return (
     <li className={styles.card}>
-      <span>{hub.parentHubName}</span>
       <div className={styles.container}>
         {hub.logo && (
           <img src={hub.logo.directLink} alt="" className={styles.logo} />
         )}
         <div className={styles.content}>
-          <a className={styles.link}>
+          {hub.parentHubName && <Pill text={hub.parentHubName} />}
+          <a
+            href={`https://test.cleanhub.com/hub/${hub.slug}`}
+            className={styles.link}
+          >
             <h1 className={styles.title}>{hub.displayName}</h1>
             <div className={styles.arrowIcon}>
               <Arrow />

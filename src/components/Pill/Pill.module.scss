@@ -1,0 +1,11 @@
+@import 'src/assets/styles/colors.scss';
+
+.pill {
+    border-radius: 5px;
+    background-color: $primaryTeal;
+    padding: 5px 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.625rem;
+    width: fit-content;
+}
