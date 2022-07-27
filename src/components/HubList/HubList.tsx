@@ -1,4 +1,5 @@
 import { ReactComponent as Bottle } from "../../assets/icons/bottles.svg";
+import { ReactComponent as Arrow } from "../../assets/icons/arrow.svg";
 import { Hub } from "../../types";
 import styles from "./HubList.module.scss";
 
@@ -24,7 +25,12 @@ function HubListItem({ hub }: { hub: Hub }) {
           <img src={hub.logo.directLink} alt="" className={styles.logo} />
         )}
         <div className={styles.content}>
-          <h1 className={styles.title}>{hub.displayName}</h1>
+          <a className={styles.link}>
+            <h1 className={styles.title}>{hub.displayName}</h1>
+            <div className={styles.arrowIcon}>
+              <Arrow />
+            </div>
+          </a>
           <span>
             {hub.type} | {hub.location}
           </span>

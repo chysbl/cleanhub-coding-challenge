@@ -1,8 +1,13 @@
+@import 'src/assets/styles/colors.scss';
+
 .card {
 	padding: 10px 15px;
-	margin: 20px;
-	border: 1px solid;
-	border-radius: 15px;	
+	max-width: 50%;
+	margin: 20px auto;
+	border: 1px solid $blueLight;
+	box-shadow: 5px 5px $secondaryBlue;
+	border-radius: 15px;
+	color: $blueDark;
 }
 
 .logo {
@@ -19,8 +24,20 @@
 .content {
 	display: flex;
 	flex-direction: column;
+	flex: 1;
 }
 
 .title {
-	margin: 0
+	margin: 0;
 }
+
+.link {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.arrowIcon {
+	width: 50px
+}
+

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import HubList from "./components/HubList/HubList";
+import styles from "./App.module.scss";
 
 function App() {
   const [data, setData] = useState([]);
@@ -13,14 +14,14 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <header>
+    <>
+      <header className={styles.header}>
         <h1>CleanHub Collection Hubs</h1>
       </header>
       <main>
         <HubList hubs={data} />
       </main>
-    </div>
+    </>
   );
 }
 
