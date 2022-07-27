@@ -1,24 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import HubList from "./components/HubList/HubList";
 
 function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://marketplace-demo.cleanhub.com/api/public/hubs")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => setData(data));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <h1>CleanHub Collection Hubs</h1>
       </header>
+      <main>
+        <HubList hubs={data} />
+      </main>
     </div>
   );
 }
