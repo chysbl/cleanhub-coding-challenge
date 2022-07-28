@@ -8,6 +8,7 @@ import { CircularProgress, Container } from "@mui/material";
 function App() {
   const [data, setData] = useState<Hub[]>([]);
   const [loading, setIsLoading] = useState<boolean>(true);
+  const [filteredData, setFilteredData] = useState<Hub[]>([]);
 
   useEffect(() => {
     fetch("https://marketplace-demo.cleanhub.com/api/public/hubs")
@@ -16,6 +17,7 @@ function App() {
       })
       .then((data) => {
         setData(data);
+        setFilteredData(data);
         setIsLoading(false);
       });
   }, []);
@@ -31,8 +33,8 @@ function App() {
         <CircularProgress />
       ) : (
         <main className={styles.main}>
-          <Filters hubs={data} />
-          <HubList hubs={data} />
+          <Filters hubs={data} setFilteredData={setFilteredData} />
+          <HubList hubs={filteredData} />
         </main>
       )}
     </Container>
