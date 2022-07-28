@@ -19,6 +19,13 @@ export interface Hub {
 		type: string;
 }
 
+export enum CompanyType {
+	'Recycling Company' = 'Recycling Company',
+	'Collection Company' = 'Collection Company',
+	'Waste Collection' = 'Waste Collection',
+	'River Cleanup' = 'River Cleanup'
+}
+
 export interface Logo {
 	directLink?: string;
 	uuid: string;
