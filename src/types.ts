@@ -17,6 +17,7 @@ export interface Hub {
 		parentHubName?: string;
 		referenceQuantityUnit: string;
 		type: string;
+		unassignedQuantityTotal: number;
 }
 
 export enum CompanyType {

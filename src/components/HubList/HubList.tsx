@@ -1,9 +1,7 @@
-import { ReactComponent as Bottle } from "../../assets/icons/bottles.svg";
 import { ReactComponent as Arrow } from "../../assets/icons/arrow.svg";
 import { Hub } from "../../types";
 import styles from "./HubList.module.scss";
 import Pill from "../Pill/Pill";
-
 interface HubListProps {
   hubs: Hub[];
 }
@@ -21,6 +19,24 @@ export default function HubList({ hubs }: HubListProps) {
   );
 }
 
+function HubListTitle({
+  displayName,
+  slug,
+}: Pick<Hub, "displayName" | "slug">) {
+  if (slug) {
+    return (
+      <a href={`https://test.cleanhub.com/hub/${slug}`} className={styles.link}>
+        <h1 className={styles.title}>{displayName}</h1>
+        <div className={styles.arrowIcon}>
+          <Arrow />
+        </div>
+      </a>
+    );
+  }
+
+  return <h1 className={styles.title}>{displayName}</h1>;
+}
+
 function HubListItem({ hub }: { hub: Hub }) {
   return (
     <li className={styles.card}>
@@ -30,19 +46,27 @@ function HubListItem({ hub }: { hub: Hub }) {
         )}
         <div className={styles.content}>
           {hub.parentHubName && <Pill text={hub.parentHubName} />}
-          <a
-            href={`https://test.cleanhub.com/hub/${hub.slug}`}
-            className={styles.link}
-          >
-            <h1 className={styles.title}>{hub.displayName}</h1>
-            <div className={styles.arrowIcon}>
-              <Arrow />
-            </div>
-          </a>
+          <HubListTitle displayName={hub.displayName} slug={hub.slug} />
           <span>
             {hub.type} | {hub.location}
           </span>
-          <Bottle />
+
+          <dl className={styles.stats}>
+            <div>
+              <dd>
+                {hub.formattedTotalRecoveredQuantity}
+                {hub.referenceQuantityUnit}
+              </dd>
+              <dt>Plastic recovered</dt>
+            </div>
+            <div>
+              <dd>
+                {Math.round(hub.unassignedQuantityTotal)}
+                {hub.referenceQuantityUnit}
+              </dd>
+              <dt>Unassigned plastic</dt>
+            </div>
+          </dl>
         </div>
       </div>
     </li>
