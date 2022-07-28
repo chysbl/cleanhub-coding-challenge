@@ -38,6 +38,8 @@ function HubListTitle({
 }
 
 function HubListItem({ hub }: { hub: Hub }) {
+  const metaInfo = [hub.type, hub.location].filter(Boolean).join(" | ");
+
   return (
     <li className={styles.card}>
       <div className={styles.container}>
@@ -47,9 +49,7 @@ function HubListItem({ hub }: { hub: Hub }) {
         <div className={styles.content}>
           {hub.parentHubName && <Pill text={hub.parentHubName} />}
           <HubListTitle displayName={hub.displayName} slug={hub.slug} />
-          <span>
-            {hub.type} | {hub.location}
-          </span>
+          <span>{metaInfo}</span>
 
           <dl className={styles.stats}>
             <div>

@@ -10,13 +10,13 @@ export interface Hub {
 		displayName: string;
 		formattedRecoveredQuantity?: string;
 		formattedTotalRecoveredQuantity?: string;
-		location: string;
+		location?: string;
 		logo: Logo;
 		name: string;
 		slug: string;
 		parentHubName?: string;
 		referenceQuantityUnit: string;
-		type: string;
+		type?: CompanyType;
 		unassignedQuantityTotal: number;
 }
 
@@ -24,7 +24,8 @@ export enum CompanyType {
 	'Recycling Company' = 'Recycling Company',
 	'Collection Company' = 'Collection Company',
 	'Waste Collection' = 'Waste Collection',
-	'River Cleanup' = 'River Cleanup'
+	'River Cleanup' = 'River Cleanup',
+	'Waste Collection and Recycling' = 'Waste Collection & Recycling',
 }
 
 export interface Logo {
