@@ -3,6 +3,8 @@ import {
   Checkbox,
   Autocomplete,
   TextField,
+  FormControl,
+  InputAdornment,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import styles from "./Filters.module.scss";
@@ -48,16 +50,9 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
     }
 
     const updatedData = hubs.filter((h) => {
-      // if (h.totalRecoveredQuantity >= filters.minKg) return true;
-
-      // if (!filters.hasParentHub) return true;
-
       if (h.parentHubName && filters.hasParentHub) {
         return true;
       }
-
-      // location stuff; all required
-      // if (!filters.location) return true;
 
       const isGlobal = filters.location === GLOBAL_LOCATION;
       if (isGlobal && h.location === null) return true;
@@ -65,10 +60,13 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
       const hasLocation = filters.location !== null;
       if (hasLocation && h.location?.includes(filters.location!)) return true;
 
+      const hasMinValue = filters.minKg !== 0;
+      if (hasMinValue && h.totalRecoveredQuantity >= filters.minKg!)
+        return true;
+
       return false;
     });
 
-    // console.log("updated", updatedData);
     setFilteredData(updatedData);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,7 +84,7 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
     <form>
       <fieldset className={styles.fieldset}>
         Filters
-        {/* <FormControl variant="outlined">
+        <FormControl variant="outlined">
           <TextField
             label={"Minimum plastic recovered"}
             id="min-plastic"
@@ -101,7 +99,7 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
               endAdornment: <InputAdornment position="end">kg</InputAdornment>,
             }}
           />
-        </FormControl> */}
+        </FormControl>
         <Autocomplete
           disablePortal
           value={filters.location}
