@@ -13,7 +13,7 @@ export default function HubList({ hubs }: HubListProps) {
   }
 
   return (
-    <ul>
+    <ul className={styles.hubList}>
       {hubs.map((hub) => (
         <HubListItem key={hub.uuid} hub={hub} />
       ))}
