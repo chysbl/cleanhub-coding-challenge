@@ -8,6 +8,10 @@ interface HubListProps {
   hubs: Hub[];
 }
 export default function HubList({ hubs }: HubListProps) {
+  if (!hubs.length) {
+    return <p>no hubs available</p>;
+  }
+
   return (
     <ul>
       {hubs.map((hub) => (
