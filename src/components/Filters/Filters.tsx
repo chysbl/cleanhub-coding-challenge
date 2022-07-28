@@ -31,20 +31,23 @@ const getHubLocations = (hubs: Hub[]): Set<string> => {
 };
 
 export default function Filters({ hubs, setFilteredData }: FiltersProps) {
-  const [companyType, setCompanyType] = useState("");
-  const [showPortfolioOnly, setShowPortfolioOnly] = useState<boolean>(false);
-  const [autocompleteValue, setAutocompleteValue] = useState<any>("");
+  const [filters, setFilters] = useState({
+    type: "",
+    showPortfolioOnly: false,
+    location: "",
+  });
 
   const onCompanyTypeSelect = (e: SelectChangeEvent<string>) => {
     const selectedCompanyType = e.target.value;
-    setCompanyType(selectedCompanyType);
+    setFilters((f) => ({ ...f, type: selectedCompanyType }));
+
     const hubsOfType = hubs.filter((h) => h.type === selectedCompanyType);
     setFilteredData(hubsOfType);
   };
 
   const setCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.checked;
-    setShowPortfolioOnly(value);
+    setFilters((f) => ({ ...f, showPortfolioOnly: value }));
 
     if (value) {
       const portfolioItems = hubs.filter((h) => h.parentHubName);
@@ -56,7 +59,7 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
   };
 
   const onHubSelect = (val: string | null) => {
-    setAutocompleteValue(val);
+    setFilters((f) => ({ ...f, location: val || "" }));
     if (val) {
       const selectedHub = hubs.filter(
         (h) => h.location && h.location.includes(val)
@@ -77,7 +80,7 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
           <Select
             labelId="company-type-select"
             id="company-type-select"
-            value={companyType}
+            value={filters.type}
             label="Company Type"
             onChange={onCompanyTypeSelect}
           >
@@ -90,7 +93,7 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
         </FormControl>
         <Autocomplete
           disablePortal
-          value={autocompleteValue}
+          value={filters.location}
           onChange={(event: any, newValue: string | null) => {
             onHubSelect(newValue);
           }}
@@ -101,7 +104,10 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
         />
         <FormControlLabel
           control={
-            <Checkbox onChange={setCheckbox} checked={showPortfolioOnly} />
+            <Checkbox
+              onChange={setCheckbox}
+              checked={filters.showPortfolioOnly}
+            />
           }
           label="Show only portfolio"
         />

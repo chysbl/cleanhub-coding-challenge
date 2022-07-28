@@ -22,8 +22,6 @@ function App() {
       });
   }, []);
 
-  console.log(data);
-
   return (
     <Container maxWidth="lg">
       <header className={styles.header}>
