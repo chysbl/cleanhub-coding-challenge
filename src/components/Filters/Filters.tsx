@@ -2,16 +2,13 @@ import {
   FormControlLabel,
   Checkbox,
   FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Autocomplete,
   TextField,
-  SelectChangeEvent,
+  InputAdornment,
 } from "@mui/material";
 import React, { useState } from "react";
 import styles from "./Filters.module.scss";
-import { CompanyType, Hub } from "../../types";
+import { Hub } from "../../types";
 
 interface FiltersProps {
   hubs: Hub[];
@@ -36,14 +33,6 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
     showPortfolioOnly: false,
     location: "",
   });
-
-  const onCompanyTypeSelect = (e: SelectChangeEvent<string>) => {
-    const selectedCompanyType = e.target.value;
-    setFilters((f) => ({ ...f, type: selectedCompanyType }));
-
-    const hubsOfType = hubs.filter((h) => h.type === selectedCompanyType);
-    setFilteredData(hubsOfType);
-  };
 
   const setCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.checked;
@@ -75,21 +64,16 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
     <form>
       <fieldset className={styles.fieldset}>
         Filters
-        <FormControl sx={{ width: 300 }}>
-          <InputLabel id="company-type-select-label">Company type</InputLabel>
-          <Select
-            labelId="company-type-select"
-            id="company-type-select"
-            value={filters.type}
-            label="Company Type"
-            onChange={onCompanyTypeSelect}
-          >
-            {Object.values(CompanyType).map((type) => (
-              <MenuItem key={type} value={type}>
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
+        <FormControl variant="outlined">
+          <TextField
+            label={"Minimum plastic recovered"}
+            id="min-plastic"
+            value={""}
+            onChange={() => console.log("weight")}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+            }}
+          />
         </FormControl>
         <Autocomplete
           disablePortal
@@ -99,7 +83,6 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
           }}
           id="hub-search-field"
           options={Array.from(getHubLocations(hubs))}
-          sx={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Hubs" />}
         />
         <FormControlLabel
