@@ -1,12 +1,10 @@
 import {
   FormControlLabel,
   Checkbox,
-  FormControl,
   Autocomplete,
   TextField,
-  InputAdornment,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Filters.module.scss";
 import { Hub } from "../../types";
 
@@ -15,84 +13,115 @@ interface FiltersProps {
   setFilteredData: (f: Hub[]) => void;
 }
 
+const GLOBAL_LOCATION = "Global";
 const getHubLocations = (hubs: Hub[]): Set<string> => {
   const countries = hubs.map((hub) => {
     const loc = hub.location;
-    if (!loc) return "";
+    if (!loc) return GLOBAL_LOCATION;
 
-    const splitLocation = loc.split(",");
-    return splitLocation.length > 1 ? splitLocation[1] : splitLocation.join("");
+    return loc;
   });
 
-  return new Set(countries.filter(Boolean));
+  return new Set(countries.sort().filter(Boolean));
 };
 
+interface FilterConfig {
+  minKg: number;
+  hasParentHub: boolean;
+  location: string | null;
+}
+
 export default function Filters({ hubs, setFilteredData }: FiltersProps) {
-  const [filters, setFilters] = useState({
-    type: "",
-    showPortfolioOnly: false,
-    location: "",
+  const [filters, setFilters] = useState<FilterConfig>({
+    minKg: 0,
+    hasParentHub: false,
+    location: null,
   });
 
-  const setCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.checked;
-    setFilters((f) => ({ ...f, showPortfolioOnly: value }));
+  useEffect(() => {
+    const { minKg, hasParentHub, location } = filters;
 
-    if (value) {
-      const portfolioItems = hubs.filter((h) => h.parentHubName);
-      setFilteredData(portfolioItems);
-      return;
+    const isDefaultState =
+      minKg === 0 && hasParentHub === false && location === null;
+    if (isDefaultState) {
+      return setFilteredData(hubs);
     }
 
-    setFilteredData(hubs);
+    const updatedData = hubs.filter((h) => {
+      // if (h.totalRecoveredQuantity >= filters.minKg) return true;
+
+      // if (!filters.hasParentHub) return true;
+
+      if (h.parentHubName && filters.hasParentHub) {
+        return true;
+      }
+
+      // location stuff; all required
+      // if (!filters.location) return true;
+
+      const isGlobal = filters.location === GLOBAL_LOCATION;
+      if (isGlobal && h.location === null) return true;
+
+      const hasLocation = filters.location !== null;
+      if (hasLocation && h.location?.includes(filters.location!)) return true;
+
+      return false;
+    });
+
+    // console.log("updated", updatedData);
+    setFilteredData(updatedData);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
+
+  const setCheckbox = (isChecked: boolean) => {
+    setFilters((f) => ({ ...f, hasParentHub: isChecked }));
   };
 
-  const onHubSelect = (val: string | null) => {
-    setFilters((f) => ({ ...f, location: val || "" }));
-    if (val) {
-      const selectedHub = hubs.filter(
-        (h) => h.location && h.location.includes(val)
-      );
-      setFilteredData(selectedHub);
-      return;
-    }
-
-    setFilteredData(hubs);
+  const onLocationSelect = (val: string | null) => {
+    setFilters((f) => ({ ...f, location: val || null }));
   };
 
   return (
     <form>
       <fieldset className={styles.fieldset}>
         Filters
-        <FormControl variant="outlined">
+        {/* <FormControl variant="outlined">
           <TextField
             label={"Minimum plastic recovered"}
             id="min-plastic"
-            value={""}
-            onChange={() => console.log("weight")}
+            value={filters.minKg}
+            onChange={(m) =>
+              setFilters((f) => ({
+                ...f,
+                minKg: parseInt(m.target.value || "0"),
+              }))
+            }
             InputProps={{
               endAdornment: <InputAdornment position="end">kg</InputAdornment>,
             }}
           />
-        </FormControl>
+        </FormControl> */}
         <Autocomplete
           disablePortal
           value={filters.location}
-          onChange={(event: any, newValue: string | null) => {
-            onHubSelect(newValue);
-          }}
-          id="hub-search-field"
+          onChange={(event: any, newValue: string | null) =>
+            onLocationSelect(newValue)
+          }
+          id="location-autocomplete"
           options={Array.from(getHubLocations(hubs))}
-          renderInput={(params) => <TextField {...params} label="Hubs" />}
+          renderInput={(params) => <TextField {...params} label="Locations" />}
         />
         <FormControlLabel
           control={
             <Checkbox
-              onChange={setCheckbox}
-              checked={filters.showPortfolioOnly}
+              onChange={(event: any, isChecked: boolean) =>
+                setCheckbox(isChecked)
+              }
+              checked={filters.hasParentHub}
             />
           }
-          label="Show only portfolio"
+          label="Show portfolios only"
         />
       </fieldset>
     </form>

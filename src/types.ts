@@ -18,6 +18,7 @@ export interface Hub {
 		referenceQuantityUnit: string;
 		type?: CompanyType;
 		unassignedQuantityTotal: number;
+		totalRecoveredQuantity: number;
 }
 
 export enum CompanyType {
