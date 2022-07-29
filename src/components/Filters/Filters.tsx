@@ -24,33 +24,33 @@ const getHubLocations = (hubs: Hub[]): Set<string> => {
     return loc;
   });
 
-  return new Set(countries.sort().filter(Boolean));
+  return new Set(countries.filter(Boolean).sort());
 };
 
 interface FilterConfig {
   minKg: number;
-  hasParentHub: boolean;
+  includePortfolio: boolean;
   location: string | null;
 }
 
 export default function Filters({ hubs, setFilteredData }: FiltersProps) {
   const [filters, setFilters] = useState<FilterConfig>({
     minKg: 0,
-    hasParentHub: false,
+    includePortfolio: false,
     location: null,
   });
 
   useEffect(() => {
-    const { minKg, hasParentHub, location } = filters;
+    const { minKg, includePortfolio, location } = filters;
 
     const isDefaultState =
-      minKg === 0 && hasParentHub === false && location === null;
+      minKg === 0 && includePortfolio === false && location === null;
     if (isDefaultState) {
       return setFilteredData(hubs);
     }
 
     const updatedData = hubs.filter((h) => {
-      if (h.parentHubName && filters.hasParentHub) {
+      if (h.parentHubName && filters.includePortfolio) {
         return true;
       }
 
@@ -73,7 +73,7 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
   }, [filters]);
 
   const setCheckbox = (isChecked: boolean) => {
-    setFilters((f) => ({ ...f, hasParentHub: isChecked }));
+    setFilters((f) => ({ ...f, includePortfolio: isChecked }));
   };
 
   const onLocationSelect = (val: string | null) => {
@@ -116,7 +116,7 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
               onChange={(event: any, isChecked: boolean) =>
                 setCheckbox(isChecked)
               }
-              checked={filters.hasParentHub}
+              checked={filters.includePortfolio}
             />
           }
           label="Show portfolios only"
