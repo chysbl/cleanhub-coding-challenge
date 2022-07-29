@@ -12,6 +12,7 @@ function App() {
 
   const { filteredData, filterConfig } = useFilters(data);
 
+  console.log("filteredData", filteredData);
 
   useEffect(() => {
     fetch("https://marketplace-demo.cleanhub.com/api/public/hubs")

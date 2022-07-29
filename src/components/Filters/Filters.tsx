@@ -6,16 +6,11 @@ import {
   FormControl,
   InputAdornment,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "./Filters.module.scss";
 import { Hub } from "../../types";
+import { Filter, GLOBAL_LOCATION } from "../../services/useFilter";
 
-interface FiltersProps {
-  hubs: Hub[];
-  setFilteredData: (f: Hub[]) => void;
-}
-
-const GLOBAL_LOCATION = "Global";
 const getHubLocations = (hubs: Hub[]): Set<string> => {
   const countries = hubs.map((hub) => {
     const loc = hub.location;
@@ -27,57 +22,13 @@ const getHubLocations = (hubs: Hub[]): Set<string> => {
   return new Set(countries.filter(Boolean).sort());
 };
 
-interface FilterConfig {
-  minKg: number;
-  includePortfolio: boolean;
-  location: string | null;
-}
-
-export default function Filters({ hubs, setFilteredData }: FiltersProps) {
-  const [filters, setFilters] = useState<FilterConfig>({
-    minKg: 0,
-    includePortfolio: false,
-    location: null,
-  });
-
-  useEffect(() => {
-    const { minKg, includePortfolio, location } = filters;
-
-    const isDefaultState =
-      minKg === 0 && includePortfolio === false && location === null;
-    if (isDefaultState) {
-      return setFilteredData(hubs);
-    }
-
-    const updatedData = hubs.filter((h) => {
-      if (h.parentHubName && filters.includePortfolio) {
-        return true;
-      }
-
-      const isGlobal = filters.location === GLOBAL_LOCATION;
-      if (isGlobal && h.location === null) return true;
-
-      const hasLocation = filters.location !== null;
-      if (hasLocation && h.location?.includes(filters.location!)) return true;
-
-      const hasMinValue = filters.minKg !== 0;
-      if (hasMinValue && h.totalRecoveredQuantity >= filters.minKg!)
-        return true;
-
-      return false;
-    });
-
-    setFilteredData(updatedData);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
-
-  const setCheckbox = (isChecked: boolean) => {
-    setFilters((f) => ({ ...f, includePortfolio: isChecked }));
+export default function Filters({ filteredData, filterConfig }: Filter) {
+  const onCheckboxUpdate = (isChecked: boolean) => {
+    filterConfig.setFilters((f) => ({ ...f, includePortfolio: isChecked }));
   };
 
   const onLocationSelect = (val: string | null) => {
-    setFilters((f) => ({ ...f, location: val || null }));
+    filterConfig.setFilters((f) => ({ ...f, location: val || null }));
   };
 
   return (
@@ -88,11 +39,11 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
           <TextField
             label={"Minimum plastic recovered"}
             id="min-plastic"
-            value={filters.minKg}
+            value={filterConfig.filters.minKg}
             onChange={(m) =>
-              setFilters((f) => ({
+              filterConfig.setFilters((f) => ({
                 ...f,
-                minKg: parseInt(m.target.value || "0"),
+                minKg: m.target.value,
               }))
             }
             InputProps={{
@@ -102,21 +53,21 @@ export default function Filters({ hubs, setFilteredData }: FiltersProps) {
         </FormControl>
         <Autocomplete
           disablePortal
-          value={filters.location}
+          value={filterConfig.filters.location}
           onChange={(event: any, newValue: string | null) =>
             onLocationSelect(newValue)
           }
           id="location-autocomplete"
-          options={Array.from(getHubLocations(hubs))}
+          options={Array.from(getHubLocations(filteredData))}
           renderInput={(params) => <TextField {...params} label="Locations" />}
         />
         <FormControlLabel
           control={
             <Checkbox
               onChange={(event: any, isChecked: boolean) =>
-                setCheckbox(isChecked)
+                onCheckboxUpdate(isChecked)
               }
-              checked={filters.includePortfolio}
+              checked={filterConfig.filters.includePortfolio}
             />
           }
           label="Show portfolios only"

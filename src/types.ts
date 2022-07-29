@@ -33,3 +33,4 @@ export interface Logo {
 	directLink?: string;
 	uuid: string;
 }
+
