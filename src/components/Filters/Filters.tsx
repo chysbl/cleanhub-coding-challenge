@@ -11,18 +11,22 @@ import styles from "./Filters.module.scss";
 import { Hub } from "../../types";
 import { Filter, GLOBAL_LOCATION } from "../../services/useFilter";
 
-const getHubLocations = (hubs: Hub[]): Set<string> => {
-  const countries = hubs.map((hub) => {
+const getHubLocations = (initialData: Hub[]): string[] => {
+  const allLocations = initialData.map((hub) => {
     const loc = hub.location;
     if (!loc) return GLOBAL_LOCATION;
 
     return loc;
   });
 
-  return new Set(countries.filter(Boolean).sort());
+  return Array.from(new Set(allLocations)).sort();
 };
 
-export default function Filters({ filteredData, filterConfig }: Filter) {
+export default function Filters({
+  initialData,
+  filteredData,
+  filterConfig,
+}: Filter & { initialData: Hub[] }) {
   const onCheckboxUpdate = (isChecked: boolean) => {
     filterConfig.setFilters((f) => ({ ...f, includePortfolio: isChecked }));
   };
@@ -30,6 +34,10 @@ export default function Filters({ filteredData, filterConfig }: Filter) {
   const onLocationSelect = (val: string | null) => {
     filterConfig.setFilters((f) => ({ ...f, location: val || null }));
   };
+
+  const filteredDataLocations = filteredData.map((f) =>
+    f.location ? f.location : null
+  );
 
   return (
     <form>
@@ -57,8 +65,15 @@ export default function Filters({ filteredData, filterConfig }: Filter) {
           onChange={(event: any, newValue: string | null) =>
             onLocationSelect(newValue)
           }
+          getOptionDisabled={(option) => {
+            if (option === GLOBAL_LOCATION) {
+              return !filteredDataLocations.includes(null);
+            }
+
+            return !filteredDataLocations.includes(option);
+          }}
           id="location-autocomplete"
-          options={Array.from(getHubLocations(filteredData))}
+          options={getHubLocations(initialData)}
           renderInput={(params) => <TextField {...params} label="Locations" />}
         />
         <FormControlLabel

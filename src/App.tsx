@@ -12,8 +12,6 @@ function App() {
 
   const { filteredData, filterConfig } = useFilters(data);
 
-  console.log("filteredData", filteredData);
-
   useEffect(() => {
     fetch("https://marketplace-demo.cleanhub.com/api/public/hubs")
       .then((res) => {
@@ -38,7 +36,11 @@ function App() {
         <main>
           <Grid container spacing={3}>
             <Grid item xs sm={4}>
-              <Filters filteredData={data} filterConfig={filterConfig} />
+              <Filters
+                initialData={data}
+                filteredData={filteredData}
+                filterConfig={filterConfig}
+              />
             </Grid>
             <Grid item xs sm={8}>
               <HubList hubs={filteredData} />
