@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { intersectionBy } from "lodash";
 import { Hub } from "../types";
 
 export const GLOBAL_LOCATION = "Global";
@@ -26,34 +27,39 @@ export default function useFilters(initialData: Hub[]): Filter {
   });
 
   useEffect(() => {
-    const { minKg, includePortfolio, location } = filters;
+    setFilteredData(initialData);
+  }, [initialData]);
 
-    const isDefaultState =
-      minKg === "" && includePortfolio === false && location === null;
-    if (isDefaultState) {
-      return setFilteredData(initialData);
-    }
+  useEffect(() => {
+    const minKgAsNum = parseInt(filters.minKg);
+    const filteredByMinKg = initialData.filter(
+      (f) => f.totalRecoveredQuantity >= (minKgAsNum || 0)
+    );
 
-    const updatedData = initialData.filter((h) => {
-      if (h.parentHubName && filters.includePortfolio) {
-        return true;
-      }
+    const filteredByPortfolio = initialData.filter((f) => {
+      if (filters.includePortfolio && !f.parentHubName) return false;
+      return true;
+    });
+
+    const filterByLocation = initialData.filter((f) => {
+      if (!filters.location) return true;
+
+      if (f.location?.includes(filters.location)) return true;
 
       const isGlobal = filters.location === GLOBAL_LOCATION;
-      if (isGlobal && h.location === null) return true;
-
-      const hasLocation = filters.location !== null;
-      if (hasLocation && h.location?.includes(filters.location!)) return true;
-
-      const minKgAsNum = parseInt(filters.minKg);
-      if (h.totalRecoveredQuantity >= minKgAsNum) return true;
+      if (isGlobal && f.location === null) return true;
 
       return false;
     });
 
-    if (updatedData.length !== initialData.length) {
-      setFilteredData(updatedData);
-    }
+    setFilteredData(
+      intersectionBy(
+        filteredByMinKg,
+        filteredByPortfolio,
+        filterByLocation,
+        "uuid"
+      )
+    );
   }, [filters, initialData]);
 
   return { filteredData, filterConfig: { filters, setFilters } };
