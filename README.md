@@ -1,46 +1,65 @@
-# Getting Started with Create React App
+# CleanHub Coding Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A small app that renders a list of Cleanhub hubs with filter functionality.
 
-## Available Scripts
+This project was created using:
 
-In the project directory, you can run:
+- Create React App + Typescript
+- React Material UI
+- Jest & Testing Library
+- SASS
 
-### `npm start`
+Minimum Node version: v14
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Instructions for local development:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Install packages:
 
-### `npm test`
+```
+npm i
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Start locally: (runs on localhost:3000)
 
-### `npm run build`
+```
+npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Run tests:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+npm test
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Other commands available in `package.json`
 
-### `npm run eject`
+## Decision points
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **Why use a component library (MUI)?**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+In order to iterate faster on the design I had in mind, I decided to use MUI (Despite this, it still took me longer than 3 hours 🥲). I've had experience with this library before and I also noticed that the CleanHub website uses it as well.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+In my opinion, it's not wrong to use one and although it doesn't completely showcase the fact that I can build components and style them from scratch, I think the end results also matter. I know which props will get me the result I want. It's not the best-looking list out there, but it works, it's accessible and it does what it's supposed to.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- **Why does the filter work this way?**
 
-## Learn More
+<details>
+<summary>
+I built the filters in a way that made sense to me, so if we had opposing ideas I'd be interested in hearing your thoughts! (If by the end we turned out to be on the same page, just pretend you didn't just read a wall of text :D)
+</summary>
+<br>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> the filters function independently, therefore a change in one should not affect the possible values of another filter (response from the email)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+From my understanding, the requirements for the filter logic is the reverse of what a typical "filter" was meant to do. I understood it as being "inclusive", meaning the more you enable the filters, the more items you see as a result (e.g. if you choose 'India' as the filter location and a minimum of 500kg of plastic collected as input, you'll see all hubs based in India and all hubs that have collected at least 500kg, regardless if they were based in India or not). With this implementation, the user will never get to the "empty" state.
+
+This had the issue where I felt like it was not intuitive. This approach meant that all filters always have to be enabled. Implementation-wise, I simply had trouble making it work without running into edge cases.
+
+In contrast, the more common filter logic is to reduce the amount of results and filters you can interact with.
+(e.g. if you choose 'India' as the filter location, and a minimum of 500kg of plastic collected as input, you will only see hubs that are based in India AND has collected at least 500kg). With this, you may end up seeing an empty state.
+
+I chose properties that, as a user, would give them the information that they might look for, should this app somehow finds its way to production. For example, the `assignable` property might make sense internally from within CleanHub but utterly useless for everyone else.
+
+At the same time, each item in the list do not contain a lot of info. This is also on purpose. The point of pages like these is to just give enough information, not to bombard the user.
+
+</details>
