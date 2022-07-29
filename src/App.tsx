@@ -35,14 +35,14 @@ function App() {
       ) : (
         <main>
           <Grid container spacing={3}>
-            <Grid item xs sm={4}>
+            <Grid item xs={12} md={4}>
               <Filters
                 initialData={data}
                 filteredData={filteredData}
                 filterConfig={filterConfig}
               />
             </Grid>
-            <Grid item xs sm={8}>
+            <Grid item xs={12} md={8}>
               <HubList hubs={filteredData} />
             </Grid>
           </Grid>

@@ -1,9 +1,5 @@
 @import 'src/assets/styles/colors.scss';
 
-.hubList {
-	flex: 2;
-}
-
 .card {
 	padding: 10px 15px;
 	margin: 20px 0;
@@ -18,34 +14,19 @@
 	width: 100px;
 }
 
-.container {
-	display: flex;
-	align-items: center;
-	gap: 10px
-}
-
-.content {
-	display: flex;
-	flex-direction: column;
-	flex: 1;
-}
-
 .title {
-	margin: 0;
+	font-weight: 600;
+	margin-top: 10px;
 }
 
 .link {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-
 	&:hover {
 		color: $blueLight;
 	}
 }
 
 .arrowIcon {
-	width: 50px
+	width: 30px
 }
 
 .stats {

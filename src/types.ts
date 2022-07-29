@@ -10,10 +10,10 @@ export interface Hub {
 		displayName: string;
 		formattedRecoveredQuantity?: string;
 		formattedTotalRecoveredQuantity?: string;
-		location?: string;
+		location: string | null;
 		logo: Logo;
 		name: string;
-		slug: string;
+		slug: string | null;
 		parentHubName?: string;
 		referenceQuantityUnit: string;
 		type?: CompanyType;

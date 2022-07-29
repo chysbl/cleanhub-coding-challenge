@@ -2,16 +2,17 @@ import { ReactComponent as Arrow } from "../../assets/icons/arrow.svg";
 import { Hub } from "../../types";
 import styles from "./HubList.module.scss";
 import Pill from "../Pill/Pill";
+import { Grid, Typography } from "@mui/material";
 interface HubListProps {
   hubs: Hub[];
 }
 export default function HubList({ hubs }: HubListProps) {
   if (!hubs.length) {
-    return <p>no hubs available</p>;
+    return <p>No hubs available</p>;
   }
 
   return (
-    <ul className={styles.hubList}>
+    <ul>
       {hubs.map((hub) => (
         <HubListItem key={hub.uuid} hub={hub} />
       ))}
@@ -26,15 +27,23 @@ function HubListTitle({
   if (slug) {
     return (
       <a href={`https://test.cleanhub.com/hub/${slug}`} className={styles.link}>
-        <h1 className={styles.title}>{displayName}</h1>
-        <div className={styles.arrowIcon}>
-          <Arrow />
-        </div>
+        <Grid container justifyContent={"space-between"} alignItems="center">
+          <Typography component="h1" variant="h4" className={styles.title}>
+            {displayName}
+          </Typography>
+          <div className={styles.arrowIcon}>
+            <Arrow />
+          </div>
+        </Grid>
       </a>
     );
   }
 
-  return <h1 className={styles.title}>{displayName}</h1>;
+  return (
+    <Typography className={styles.title} component="h1" variant="h4">
+      {displayName}
+    </Typography>
+  );
 }
 
 function HubListItem({ hub }: { hub: Hub }) {
@@ -42,11 +51,13 @@ function HubListItem({ hub }: { hub: Hub }) {
 
   return (
     <li className={styles.card}>
-      <div className={styles.container}>
-        {hub.logo && (
-          <img src={hub.logo.directLink} alt="" className={styles.logo} />
-        )}
-        <div className={styles.content}>
+      <Grid container gap={2} alignItems="center">
+        <Grid item xs={12} sm={12} md={2}>
+          {hub.logo && (
+            <img src={hub.logo.directLink} alt="" className={styles.logo} />
+          )}
+        </Grid>
+        <Grid item xs>
           {hub.parentHubName && <Pill text={hub.parentHubName} />}
           <HubListTitle displayName={hub.displayName} slug={hub.slug} />
           <span>{metaInfo}</span>
@@ -67,8 +78,8 @@ function HubListItem({ hub }: { hub: Hub }) {
               <dt>Unassigned plastic</dt>
             </div>
           </dl>
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     </li>
   );
 }
