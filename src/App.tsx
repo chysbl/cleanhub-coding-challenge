@@ -3,12 +3,15 @@ import HubList from "./components/HubList/HubList";
 import styles from "./App.module.scss";
 import Filters from "./components/Filters/Filters";
 import { Hub } from "./types";
-import { CircularProgress, Container } from "@mui/material";
+import { CircularProgress, Container, Grid, Typography } from "@mui/material";
+import useFilters from "./services/useFilter";
 
 function App() {
   const [data, setData] = useState<Hub[]>([]);
   const [loading, setIsLoading] = useState<boolean>(true);
-  const [filteredData, setFilteredData] = useState<Hub[]>([]);
+
+  const { filteredData, filterConfig } = useFilters(data);
+
 
   useEffect(() => {
     fetch("https://marketplace-demo.cleanhub.com/api/public/hubs")
@@ -17,7 +20,6 @@ function App() {
       })
       .then((data) => {
         setData(data);
-        setFilteredData(data);
         setIsLoading(false);
       });
   }, []);
@@ -25,14 +27,22 @@ function App() {
   return (
     <Container maxWidth="lg">
       <header className={styles.header}>
-        <h1>CleanHub Collection Hubs</h1>
+        <Typography align="center" variant="h3" component="h1">
+          CleanHub Collection Hubs
+        </Typography>
       </header>
       {loading ? (
         <CircularProgress />
       ) : (
-        <main className={styles.main}>
-          <Filters hubs={data} setFilteredData={setFilteredData} />
-          <HubList hubs={filteredData} />
+        <main>
+          <Grid container spacing={3}>
+            <Grid item xs sm={4}>
+              <Filters filteredData={data} filterConfig={filterConfig} />
+            </Grid>
+            <Grid item xs sm={8}>
+              <HubList hubs={filteredData} />
+            </Grid>
+          </Grid>
         </main>
       )}
     </Container>
