@@ -26,7 +26,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "stylelint": "stylelint \"./**/*.scss\" --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +50,11 @@
   "devDependencies": {
     "@testing-library/react-hooks": "^8.0.1",
     "@types/lodash": "^4.14.182",
-    "jest-watch-typeahead": "^0.6.5"
+    "jest-watch-typeahead": "^0.6.5",
+    "stylelint": "^14.9.1",
+    "stylelint-config-css-modules": "^4.1.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-sass-guidelines": "^9.0.1",
+    "stylelint-config-standard": "^26.0.0"
   }
 }

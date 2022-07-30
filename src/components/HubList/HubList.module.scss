@@ -1,12 +1,12 @@
-@import 'src/assets/styles/colors.scss';
+@import 'src/assets/styles/colors';
 
 .card {
-	padding: 10px 15px;
-	margin: 20px 0;
 	border: 1px solid $blueLight;
-	box-shadow: 5px 5px $secondaryBlue;
 	border-radius: 15px;
+	box-shadow: 5px 5px $secondaryBlue;
 	color: $blueDark;
+	margin: 20px 0;
+	padding: 10px 15px;
 }
 
 .logo {
@@ -35,14 +35,14 @@
 	gap: 30px;
 
 	dd {
-		font-weight: 400;
 		font-size: 1.5rem;
+		font-weight: 400;
 		margin: 0;
 		text-align: left;
 	}
 
 	dt {
-		text-transform: uppercase;
 		font-size: 0.65rem;
+		text-transform: uppercase;
 	}
 }
