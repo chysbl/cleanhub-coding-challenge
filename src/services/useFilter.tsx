@@ -27,27 +27,23 @@ export default function useFilters(initialData: Hub[]): Filter {
   });
 
   useEffect(() => {
-    setFilteredData(initialData);
-  }, [initialData]);
-
-  useEffect(() => {
     const minKgAsNum = parseInt(filters.minKg);
     const filteredByMinKg = initialData.filter(
-      (f) => f.totalRecoveredQuantity >= (minKgAsNum || 0)
+      (data) => data.totalRecoveredQuantity >= (minKgAsNum || 0)
     );
 
-    const filteredByPortfolio = initialData.filter((f) => {
-      if (filters.includePortfolio && !f.parentHubName) return false;
+    const filteredByPortfolio = initialData.filter((data) => {
+      if (filters.includePortfolio && !data.parentHubName) return false;
       return true;
     });
 
-    const filterByLocation = initialData.filter((f) => {
+    const filteredByLocation = initialData.filter((data) => {
       if (!filters.location) return true;
 
-      if (f.location?.includes(filters.location)) return true;
+      if (data.location?.includes(filters.location!)) return true;
 
       const isGlobal = filters.location === GLOBAL_LOCATION;
-      if (isGlobal && f.location === null) return true;
+      if (isGlobal && data.location === null) return true;
 
       return false;
     });
@@ -56,7 +52,7 @@ export default function useFilters(initialData: Hub[]): Filter {
       intersectionBy(
         filteredByMinKg,
         filteredByPortfolio,
-        filterByLocation,
+        filteredByLocation,
         "uuid"
       )
     );
