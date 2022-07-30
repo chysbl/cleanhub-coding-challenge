@@ -67,3 +67,5 @@ At the same time, each item in the list do not contain a lot of info. This is al
 ## Areas of improvement
 
 - Adding more tests
+- Custom error state
+- Fleshing out the whole Hub interface
