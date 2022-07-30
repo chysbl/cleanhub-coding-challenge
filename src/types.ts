@@ -14,7 +14,7 @@ export interface Hub {
 		logo: Logo;
 		name: string;
 		slug: string | null;
-		parentHubName?: string;
+		parentHubName: string | null;
 		referenceQuantityUnit: string;
 		type?: CompanyType;
 		unassignedQuantityTotal: number;

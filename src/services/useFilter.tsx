@@ -28,33 +28,41 @@ export default function useFilters(initialData: Hub[]): Filter {
 
   useEffect(() => {
     const minKgAsNum = parseInt(filters.minKg);
-    const filteredByMinKg = initialData.filter(
-      (data) => data.totalRecoveredQuantity >= (minKgAsNum || 0)
+
+    const res = initialData.reduce(
+      (result: Record<string, Hub[]>, hub: Hub) => {
+        const hasMinQuantity = hub.totalRecoveredQuantity >= (minKgAsNum || 0);
+        if (hasMinQuantity) {
+          result.minKg.push(hub);
+        }
+
+        const shouldIncludePortfolio =
+          filters.includePortfolio && !hub.parentHubName;
+        if (!shouldIncludePortfolio) {
+          result.portfolio.push(hub);
+        }
+
+        const noLocationSelected = !filters.location;
+        const containsLocation =
+          filters.location && hub.location?.includes(filters.location);
+
+        if (noLocationSelected || containsLocation) {
+          result.location.push(hub);
+        }
+
+        const isGlobal = filters.location === GLOBAL_LOCATION;
+        const isGlobalLocation = isGlobal && hub.location === null;
+        if (isGlobalLocation) {
+          result.location.push(hub);
+        }
+
+        return result;
+      },
+      { minKg: [], portfolio: [], location: [] }
     );
 
-    const filteredByPortfolio = initialData.filter((data) => {
-      if (filters.includePortfolio && !data.parentHubName) return false;
-      return true;
-    });
-
-    const filteredByLocation = initialData.filter((data) => {
-      if (!filters.location) return true;
-
-      if (data.location?.includes(filters.location!)) return true;
-
-      const isGlobal = filters.location === GLOBAL_LOCATION;
-      if (isGlobal && data.location === null) return true;
-
-      return false;
-    });
-
     setFilteredData(
-      intersectionBy(
-        filteredByMinKg,
-        filteredByPortfolio,
-        filteredByLocation,
-        "uuid"
-      )
+      intersectionBy(res.minKg, res.portfolio, res.location, "uuid")
     );
   }, [filters, initialData]);
 
