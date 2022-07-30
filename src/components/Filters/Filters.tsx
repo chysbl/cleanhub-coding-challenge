@@ -5,14 +5,13 @@ import {
   TextField,
   FormControl,
   InputAdornment,
-} from "@mui/material";
-import React from "react";
-import styles from "./Filters.module.scss";
-import { Hub } from "../../types";
-import { Filter, GLOBAL_LOCATION } from "../../services/useFilter";
+} from '@mui/material';
+import styles from './Filters.module.scss';
+import { Hub } from '../../types';
+import { Filter, GLOBAL_LOCATION } from '../../services/useFilter';
 
 const getHubLocations = (initialData: Hub[]): string[] => {
-  const allLocations = initialData.map((hub) => {
+  const allLocations = initialData.map(hub => {
     const loc = hub.location;
     if (!loc) return GLOBAL_LOCATION;
 
@@ -28,14 +27,14 @@ export default function Filters({
   filterConfig,
 }: Filter & { initialData: Hub[] }) {
   const onCheckboxUpdate = (isChecked: boolean) => {
-    filterConfig.setFilters((f) => ({ ...f, includePortfolio: isChecked }));
+    filterConfig.setFilters(f => ({ ...f, includePortfolio: isChecked }));
   };
 
   const onLocationSelect = (val: string | null) => {
-    filterConfig.setFilters((f) => ({ ...f, location: val || null }));
+    filterConfig.setFilters(f => ({ ...f, location: val || null }));
   };
 
-  const filteredDataLocations = filteredData.map((f) =>
+  const filteredDataLocations = filteredData.map(f =>
     f.location ? f.location : null
   );
 
@@ -45,12 +44,12 @@ export default function Filters({
         Filters
         <FormControl variant="outlined">
           <TextField
-            label={"Minimum plastic recovered"}
+            label={'Minimum plastic recovered'}
             id="min-plastic"
             type="number"
             value={filterConfig.filters.minKg}
-            onChange={(m) =>
-              filterConfig.setFilters((f) => ({
+            onChange={m =>
+              filterConfig.setFilters(f => ({
                 ...f,
                 minKg: m.target.value,
               }))
@@ -66,7 +65,7 @@ export default function Filters({
           onChange={(event: any, newValue: string | null) =>
             onLocationSelect(newValue)
           }
-          getOptionDisabled={(option) => {
+          getOptionDisabled={option => {
             if (option === GLOBAL_LOCATION) {
               return !filteredDataLocations.includes(null);
             }
@@ -75,7 +74,7 @@ export default function Filters({
           }}
           id="location-autocomplete"
           options={getHubLocations(initialData)}
-          renderInput={(params) => <TextField {...params} label="Locations" />}
+          renderInput={params => <TextField {...params} label="Locations" />}
         />
         <FormControlLabel
           control={

@@ -5,20 +5,20 @@
  * later on.
  */
 export interface Hub {
-    uuid: string;
-		cardDescription: string;
-		displayName: string;
-		formattedRecoveredQuantity?: string;
-		formattedTotalRecoveredQuantity?: string;
-		location: string | null;
-		logo: Logo;
-		name: string;
-		slug: string | null;
-		parentHubName: string | null;
-		referenceQuantityUnit: string;
-		type?: CompanyType;
-		unassignedQuantityTotal: number;
-		totalRecoveredQuantity: number;
+	uuid: string;
+	cardDescription: string;
+	displayName: string;
+	formattedRecoveredQuantity?: string;
+	formattedTotalRecoveredQuantity?: string;
+	location: string | null;
+	logo: Logo;
+	name: string;
+	slug: string | null;
+	parentHubName: string | null;
+	referenceQuantityUnit: string;
+	type?: CompanyType;
+	unassignedQuantityTotal: number;
+	totalRecoveredQuantity: number;
 }
 
 export enum CompanyType {

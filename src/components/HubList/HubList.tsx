@@ -1,8 +1,8 @@
-import { ReactComponent as Arrow } from "../../assets/icons/arrow.svg";
-import { Hub } from "../../types";
-import styles from "./HubList.module.scss";
-import Pill from "../Pill/Pill";
-import { Grid, Typography } from "@mui/material";
+import { ReactComponent as Arrow } from '../../assets/icons/arrow.svg';
+import { Hub } from '../../types';
+import styles from './HubList.module.scss';
+import Pill from '../Pill/Pill';
+import { Grid, Typography } from '@mui/material';
 interface HubListProps {
   hubs: Hub[];
 }
@@ -13,7 +13,7 @@ export default function HubList({ hubs }: HubListProps) {
 
   return (
     <ul>
-      {hubs.map((hub) => (
+      {hubs.map(hub => (
         <HubListItem key={hub.uuid} hub={hub} />
       ))}
     </ul>
@@ -23,11 +23,11 @@ export default function HubList({ hubs }: HubListProps) {
 function HubListTitle({
   displayName,
   slug,
-}: Pick<Hub, "displayName" | "slug">) {
+}: Pick<Hub, 'displayName' | 'slug'>) {
   if (slug) {
     return (
       <a href={`https://test.cleanhub.com/hub/${slug}`} className={styles.link}>
-        <Grid container justifyContent={"space-between"} alignItems="center">
+        <Grid container justifyContent={'space-between'} alignItems="center">
           <Typography component="h1" variant="h4" className={styles.title}>
             {displayName}
           </Typography>
@@ -47,7 +47,7 @@ function HubListTitle({
 }
 
 function HubListItem({ hub }: { hub: Hub }) {
-  const metaInfo = [hub.type, hub.location].filter(Boolean).join(" | ");
+  const metaInfo = [hub.type, hub.location].filter(Boolean).join(' | ');
 
   return (
     <li className={styles.card}>

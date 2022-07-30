@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import HubList from "./components/HubList/HubList";
-import styles from "./App.module.scss";
-import Filters from "./components/Filters/Filters";
-import { Hub } from "./types";
-import { CircularProgress, Container, Grid, Typography } from "@mui/material";
-import useFilters from "./services/useFilter";
-import { getAllHubs } from "./api/hubs";
+import { useEffect, useState } from 'react';
+import HubList from './components/HubList/HubList';
+import styles from './App.module.scss';
+import Filters from './components/Filters/Filters';
+import { Hub } from './types';
+import { CircularProgress, Container, Grid, Typography } from '@mui/material';
+import useFilters from './services/useFilter';
+import { getAllHubs } from './api/hubs';
 
 function App() {
   const [data, setData] = useState<Hub[]>([]);
@@ -18,7 +18,7 @@ function App() {
         const hubs = await getAllHubs();
         setData(hubs.data);
       } catch (e) {
-        console.log("error");
+        console.log('error');
       } finally {
         setIsLoading(false);
       }

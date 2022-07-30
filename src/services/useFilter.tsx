@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { intersectionBy } from "lodash";
-import { Hub } from "../types";
+import { useState, useEffect } from 'react';
+import { intersectionBy } from 'lodash';
+import { Hub } from '../types';
 
-export const GLOBAL_LOCATION = "Global";
+export const GLOBAL_LOCATION = 'Global';
 
 export interface FilterConfig {
   minKg: string;
@@ -21,7 +21,7 @@ export interface Filter {
 export default function useFilters(initialData: Hub[]): Filter {
   const [filteredData, setFilteredData] = useState<Hub[]>(initialData);
   const [filters, setFilters] = useState<FilterConfig>({
-    minKg: "",
+    minKg: '',
     includePortfolio: false,
     location: null,
   });
@@ -62,7 +62,7 @@ export default function useFilters(initialData: Hub[]): Filter {
     );
 
     setFilteredData(
-      intersectionBy(res.minKg, res.portfolio, res.location, "uuid")
+      intersectionBy(res.minKg, res.portfolio, res.location, 'uuid')
     );
   }, [filters, initialData]);
 
