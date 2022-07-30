@@ -63,3 +63,7 @@ I chose properties that, as a user, would give them the information that they mi
 At the same time, each item in the list do not contain a lot of info. This is also on purpose. The point of pages like these is to just give enough information, not to bombard the user.
 
 </details>
+
+## Areas of improvement
+
+- Adding more tests
