@@ -47,6 +47,7 @@ export default function Filters({
           <TextField
             label={"Minimum plastic recovered"}
             id="min-plastic"
+            type="number"
             value={filterConfig.filters.minKg}
             onChange={(m) =>
               filterConfig.setFilters((f) => ({
