@@ -5,22 +5,26 @@ import Filters from "./components/Filters/Filters";
 import { Hub } from "./types";
 import { CircularProgress, Container, Grid, Typography } from "@mui/material";
 import useFilters from "./services/useFilter";
+import { getAllHubs } from "./api/hubs";
 
 function App() {
   const [data, setData] = useState<Hub[]>([]);
   const [loading, setIsLoading] = useState<boolean>(true);
-
   const { filteredData, filterConfig } = useFilters(data);
 
   useEffect(() => {
-    fetch("https://marketplace-demo.cleanhub.com/api/public/hubs")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setData(data);
+    const getData = async () => {
+      try {
+        const hubs = await getAllHubs();
+        setData(hubs.data);
+      } catch (e) {
+        console.log("error");
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+
+    getData();
   }, []);
 
   return (
